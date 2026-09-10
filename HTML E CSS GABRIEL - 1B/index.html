@@ -1,27 +1,3769 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <title>Deadliest mountains</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Stocks Game</title>
+
+
+<!-- =========================================================
+     CSS
+     TODA A APARÊNCIA DO JOGO FICA AQUI
+     ========================================================= -->
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+        radial-gradient(circle at top, #172441, #070b14 65%);
+
+    color: white;
+
+    min-height: 100vh;
+
+}
+
+
+/* =========================================================
+   CABEÇALHO
+   ========================================================= */
+
+header {
+
+    height: 75px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #121d34,
+            #0b1222
+        );
+
+    border-bottom: 1px solid #293957;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 30px;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+}
+
+
+.logo {
+
+    font-size: 27px;
+
+    font-weight: 900;
+
+    letter-spacing: -1px;
+
+}
+
+.logo span {
+
+    color: #39e486;
+
+}
+
+
+/* =========================================================
+   LADO DIREITO DO CABEÇALHO
+   ========================================================= */
+
+.header-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+
+.balance {
+
+    background: #17243d;
+
+    border: 1px solid #2b3c5e;
+
+    padding: 10px 16px;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.profile-button {
+
+    border: 1px solid #405476;
+
+    background:
+        linear-gradient(
+            145deg,
+            #253758,
+            #111a2d
+        );
+
+    color: white;
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    font-size: 22px;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.35);
+
+    transition: .2s;
+
+}
+
+.profile-button:hover {
+
+    transform: translateY(-2px) scale(1.04);
+
+    border-color: #39e486;
+
+}
+
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+nav {
+
+    display: flex;
+
+    gap: 8px;
+
+    padding: 13px 30px;
+
+    background: #0d1526;
+
+    border-bottom: 1px solid #253451;
+
+    overflow-x: auto;
+
+}
+
+
+nav button {
+
+    background: transparent;
+
+    border: none;
+
+    color: #91a0ba;
+
+    padding: 10px 17px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+}
+
+
+nav button:hover,
+nav button.active {
+
+    background: #223452;
+
+    color: white;
+
+}
+
+
+/* =========================================================
+   PÁGINAS
+   ========================================================= */
+
+main {
+
+    max-width: 1250px;
+
+    margin: auto;
+
+    padding: 30px;
+
+}
+
+
+.page {
+
+    display: none;
+
+}
+
+
+.page.active {
+
+    display: block;
+
+}
+
+
+.page-title {
+
+    margin-bottom: 20px;
+
+}
+
+
+.page-title h1 {
+
+    font-size: 31px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.page-title p {
+
+    color: #8997b0;
+
+}
+
+
+/* =========================================================
+   JOGO
+   ========================================================= */
+
+.game-container {
+
+    background:
+        linear-gradient(
+            145deg,
+            #121d32,
+            #0b1323
+        );
+
+    border: 1px solid #293957;
+
+    border-radius: 16px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.25);
+
+}
+
+
+.stock-info {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+
+}
+
+
+.stock-name {
+
+    color: #aab8d0;
+
+    font-weight: bold;
+
+}
+
+
+.stock-value {
+
+    font-size: 29px;
+
+    font-weight: bold;
+
+}
+
+
+.positive {
+
+    color: #39e486;
+
+}
+
+
+.negative {
+
+    color: #ff5668;
+
+}
+
+
+/* =========================================================
+   INFORMAÇÕES DA APOSTA
+   ========================================================= */
+
+.round-info {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.info-box {
+
+    background: #182640;
+
+    padding: 10px 15px;
+
+    border-radius: 9px;
+
+}
+
+
+.info-label {
+
+    display: block;
+
+    color: #8492aa;
+
+    font-size: 12px;
+
+    margin-bottom: 4px;
+
+}
+
+
+.info-number {
+
+    font-weight: bold;
+
+}
+
+
+/* =========================================================
+   GRÁFICO
+   ========================================================= */
+
+#stockChart {
+
+    width: 100%;
+
+    height: 400px;
+
+    background: #070c16;
+
+    border-radius: 10px;
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   CONTROLES
+   ========================================================= */
+
+.control-area {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+}
+
+
+#betInput {
+
+    width: 210px;
+
+    background: #182640;
+
+    color: white;
+
+    border: 1px solid #34496e;
+
+    border-radius: 8px;
+
+    padding: 14px;
+
+    font-size: 16px;
+
+}
+
+
+.main-button {
+
+    flex: 1;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #39e486;
+
+    color: #06120b;
+
+    font-weight: bold;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+}
+
+
+.main-button.rescue {
+
+    background: #ffd34d;
+
+}
+
+
+.bet-info {
+
+    color: #8d9ab1;
+
+    margin-top: 12px;
+
+    line-height: 1.5;
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+   LOJA
+   ========================================================= */
+
+.shop-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(220px,1fr)
+        );
+
+    gap: 20px;
+
+}
+
+
+.item-card {
+
+    background:
+        linear-gradient(
+            145deg,
+            #16233b,
+            #0d1627
+        );
+
+    border: 1px solid #293957;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    transition: .2s;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.25);
+
+}
+
+
+.item-card:hover {
+
+    transform:
+        perspective(700px)
+        rotateX(2deg)
+        rotateY(-2deg)
+        translateY(-5px);
+
+}
+
+
+.item-image {
+
+    height: 155px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle,
+            #2a4269,
+            #111c31
+        );
+
+    font-size: 65px;
+
+}
+
+
+.item-info {
+
+    padding: 18px;
+
+}
+
+
+.item-info h3 {
+
+    margin-bottom: 8px;
+
+}
+
+
+.item-info p {
+
+    color: #8997af;
+
+    font-size: 14px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.price {
+
+    color: #39e486;
+
+    font-size: 19px;
+
+    font-weight: bold;
+
+    margin-bottom: 12px;
+
+}
+
+
+.buy-button {
+
+    width: 100%;
+
+    padding: 11px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #294267;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.buy-button:hover {
+
+    background: #355681;
+
+}
+
+
+.buy-button:disabled {
+
+    background: #242b38;
+
+    color: #697384;
+
+    cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   PERFIL
+   ========================================================= */
+
+.profile-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        300px
+        1fr;
+
+    gap: 25px;
+
+}
+
+
+/* =========================================================
+   CARTÃO DE INFORMAÇÕES
+   ========================================================= */
+
+.profile-card {
+
+    background:
+        linear-gradient(
+            145deg,
+            #17243b,
+            #0c1424
+        );
+
+    border: 1px solid #2d405f;
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.3);
+
+}
+
+
+.profile-card h2 {
+
+    margin-bottom: 20px;
+
+}
+
+
+.profile-input {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    border: 1px solid #35496a;
+
+    background: #101a2c;
+
+    color: white;
+
+    margin-bottom: 15px;
+
+}
+
+
+.save-button {
+
+    width: 100%;
+
+    border: none;
+
+    background: #2387ff;
+
+    color: white;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================================================
+   PERSONAGEM 3D
+   ========================================================= */
+
+.character-stage {
+
+    min-height: 560px;
+
+    border-radius: 18px;
+
+    border: 1px solid #2e4262;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 30%,
+            #263d60,
+            #0a101c 65%
+        );
+
+    position: relative;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: center;
+
+    perspective: 900px;
+
+}
+
+
+.character-stage::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+
+    height: 100px;
+
+    bottom: 25px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(0,200,255,.3),
+            transparent 70%
+        );
+
+    transform:
+        rotateX(70deg);
+
+}
+
+
+/* =========================================================
+   PERSONAGEM
+   ========================================================= */
+
+.character {
+
+    width: 190px;
+
+    height: 430px;
+
+    position: relative;
+
+    transform-style: preserve-3d;
+
+    animation:
+        characterFloat 4s
+        ease-in-out
+        infinite;
+
+}
+
+
+@keyframes characterFloat {
+
+    0%,100% {
+
+        transform:
+            translateY(0)
+            rotateY(-5deg);
+
+    }
+
+    50% {
+
+        transform:
+            translateY(-5px)
+            rotateY(5deg);
+
+    }
+
+}
+
+
+/* CABEÇA */
+
+.head {
+
+    position: absolute;
+
+    width: 88px;
+
+    height: 105px;
+
+    border-radius:
+        45%
+        45%
+        42%
+        42%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #b86f4f,
+            #e6a17a
+        );
+
+    top: 10px;
+
+    left: 51px;
+
+    box-shadow:
+        inset -10px 0 15px rgba(0,0,0,.2);
+
+}
+
+
+/* CABELO */
+
+.hair {
+
+    position: absolute;
+
+    width: 91px;
+
+    height: 48px;
+
+    top: 4px;
+
+    left: 49px;
+
+    border-radius:
+        50px
+        50px
+        15px
+        15px;
+
+    background:
+        linear-gradient(
+            120deg,
+            #17110d,
+            #493329
+        );
+
+    z-index: 4;
+
+}
+
+
+/* CORPO */
+
+.body {
+
+    position: absolute;
+
+    width: 125px;
+
+    height: 175px;
+
+    top: 105px;
+
+    left: 32px;
+
+    border-radius:
+        35px
+        35px
+        15px
+        15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #dedede,
+            #ffffff,
+            #c6c6c6
+        );
+
+    box-shadow:
+        10px 8px 20px rgba(0,0,0,.35);
+
+}
+
+
+/* BRAÇOS */
+
+.arm {
+
+    position: absolute;
+
+    width: 42px;
+
+    height: 150px;
+
+    top: 115px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #bd7756,
+            #e4a17c
+        );
+
+    border-radius: 30px;
+
+}
+
+
+.arm.left {
+
+    left: 0;
+
+    transform:
+        rotate(8deg);
+
+}
+
+
+.arm.right {
+
+    right: 0;
+
+    transform:
+        rotate(-8deg);
+
+}
+
+
+/* CALÇA */
+
+.pants {
+
+    position: absolute;
+
+    width: 120px;
+
+    height: 160px;
+
+    top: 270px;
+
+    left: 35px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #151a22,
+            #303a49,
+            #11151c
+        );
+
+    clip-path:
+        polygon(
+            5% 0,
+            95% 0,
+            70% 100%,
+            52% 100%,
+            50% 45%,
+            48% 100%,
+            30% 100%
+        );
+
+}
+
+
+/* SAPATOS */
+
+.shoes {
+
+    position: absolute;
+
+    width: 62px;
+
+    height: 28px;
+
+    bottom: 3px;
+
+    background:
+        linear-gradient(
+            white,
+            #9da4ad
+        );
+
+    border-radius:
+        10px
+        20px
+        8px
+        8px;
+
+}
+
+
+.shoes.left {
+
+    left: 35px;
+
+}
+
+
+.shoes.right {
+
+    right: 35px;
+
+}
+
+
+/* =========================================================
+   ROUPAS DO PERSONAGEM
+   ========================================================= */
+
+.clothing-selector {
+
+    position: absolute;
+
+    right: 20px;
+
+    top: 20px;
+
+    width: 240px;
+
+    background:
+        rgba(8,14,25,.82);
+
+    border:
+        1px solid #334866;
+
+    border-radius: 14px;
+
+    padding: 15px;
+
+    backdrop-filter:
+        blur(10px);
+
+}
+
+
+.clothing-selector h3 {
+
+    margin-bottom: 12px;
+
+}
+
+
+.clothes-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 8px;
+
+}
+
+
+.clothes-buttons button {
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    border: 1px solid #354b6e;
+
+    background: #16243a;
+
+    color: white;
+
+    cursor: pointer;
+
+}
+
+
+.clothes-buttons button:hover {
+
+    border-color: #39e486;
+
+}
+
+
+/* =========================================================
+   GARAGEM
+   ========================================================= */
+
+.garage {
+
+    margin-top: 25px;
+
+}
+
+
+.garage-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(230px,1fr)
+        );
+
+    gap: 18px;
+
+}
+
+
+.garage-car {
+
+    height: 190px;
+
+    border:
+        1px solid #2c4162;
+
+    border-radius: 14px;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            #273c5d,
+            #0c1423
+        );
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 15px;
+
+    transform-style: preserve-3d;
+
+}
+
+
+.garage-car:hover {
+
+    transform:
+        perspective(700px)
+        rotateY(-5deg)
+        translateZ(5px);
+
+}
+
+
+/* CARRO ESTILIZADO */
+
+.car-body {
+
+    position: absolute;
+
+    width: 175px;
+
+    height: 55px;
+
+    left: 27px;
+
+    bottom: 48px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #3e91ff,
+            #1450a2
+        );
+
+    border-radius:
+        45px
+        25px
+        15px
+        15px;
+
+    box-shadow:
+        0 15px 20px rgba(0,0,0,.5);
+
+}
+
+
+.car-body::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 85px;
+
+    height: 35px;
+
+    left: 45px;
+
+    top: -22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6e8daa,
+            #152437
+        );
+
+    border-radius:
+        35px
+        35px
+        5px
+        5px;
+
+}
+
+
+.wheel {
+
+    position: absolute;
+
+    width: 37px;
+
+    height: 37px;
+
+    bottom: 30px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #a9b1bc 0 20%,
+            #090b10 22% 100%
+        );
+
+}
+
+
+.wheel.left {
+
+    left: 45px;
+
+}
+
+
+.wheel.right {
+    left: 150px;
+    right: auto;
+}
+
+
+.car-name {
+
+    font-weight: bold;
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+
+/* =========================================================
+   INVENTÁRIO
+   ========================================================= */
+
+.inventory-list {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+}
+
+
+.inventory-item {
+
+    background: #182640;
+
+    border: 1px solid #2e4261;
+
+    padding: 12px 16px;
+
+    border-radius: 9px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media(max-width:800px) {
+
+    .profile-layout {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .clothing-selector {
+
+        position: static;
+
+        width: 90%;
+
+        margin: 20px auto;
+
+    }
+
+}
+
+
+@media(max-width:600px) {
+
+    header {
+
+        padding: 0 15px;
+
+    }
+
+    nav {
+
+        padding: 10px;
+
+    }
+
+    main {
+
+        padding: 15px;
+
+    }
+
+    .control-area {
+
+        flex-direction: column;
+
+    }
+
+    #betInput {
+
+        width: 100%;
+
+    }
+
+    #stockChart {
+
+        height: 300px;
+
+    }
+
+}
+
+</style>
+
 </head>
+
+
 <body>
-    <main>
-        <div class="passo ativo" id="passo-0">
-            <p>Um dia desses, você se sentiu inspirado e decediu subir uma montanha alta e perigosa com seu amigo, em busca de uma conquista arriscada.</p>
-            <button class="btn-proximo" data-proximo="1">K2</button>
-            <button class="btn-proximo" data-proximo="2">Annapurna I</button>
+
+
+<!-- =========================================================
+     CABEÇALHO
+     ========================================================= -->
+
+<header>
+
+    <div class="logo">
+        Stocks <span>Game</span>
+    </div>
+
+
+    <div class="header-right">
+
+        <div class="balance">
+
+            Saldo:
+            <span id="balance">
+                $100.00
+            </span>
+
         </div>
-        <div class="passo" id="passo-1">
-            <p>Você e seu amigo decidiram subir a Annapurna I, mesmo com o concentimento que ela e a montanha mais perigosa do mundo.</p>  
-            <button class="btn-proximo" data-proximo="3">Seguir em frente e subirla</button>
-            <button class="btn-proximo" data-proximo="4">Desistir e voltar atras</button>
+
+
+        <!--
+            BOTÃO DO PERFIL
+
+            Fica no lado direito.
+        -->
+
+        <button
+            class="profile-button"
+            onclick="openProfile()">
+
+            👤
+
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     MENU
+     ========================================================= -->
+
+<nav>
+
+    <button
+        class="active"
+        onclick="showPage('game',this)">
+
+        📈 Mercado
+
+    </button>
+
+
+    <button
+        onclick="showPage('houses',this)">
+
+        🏠 Casas
+
+    </button>
+
+
+    <button
+        onclick="showPage('cars',this)">
+
+        🚗 Carros
+
+    </button>
+
+
+    <button
+        onclick="showPage('clothes',this)">
+
+        👕 Roupas
+
+    </button>
+
+
+    <button
+        onclick="showPage('inventory',this)">
+
+        🎒 Inventário
+
+    </button>
+
+
+    <!--
+        PERFIL FICA NO FINAL DA BARRA
+    -->
+
+    <button
+        onclick="openProfile()">
+
+        👤 Perfil
+
+    </button>
+
+</nav>
+
+
+
+<main>
+
+
+<!-- =========================================================
+     MERCADO
+     ========================================================= -->
+
+<section
+    id="game"
+    class="page active">
+
+
+    <div class="page-title">
+
+        <h1>
+            Mercado de Ações
+        </h1>
+
+        <p>
+            Observe o mercado e escolha quando resgatar.
+        </p>
+
+    </div>
+
+
+    <div class="game-container">
+
+
+        <div class="stock-info">
+
+            <div class="stock-name">
+                STOCKS GAME
+            </div>
+
+
+            <div
+                id="stockValue"
+                class="stock-value">
+
+                +0.00%
+
+            </div>
+
         </div>
-    </main>
-    <script src="script.js"></script>
+
+
+        <div
+            id="roundInfo"
+            class="round-info"
+            style="display:none">
+
+
+            <div class="info-box">
+
+                <span class="info-label">
+                    Aposta
+                </span>
+
+                <span
+                    id="currentBetDisplay"
+                    class="info-number">
+
+                    $0.00
+
+                </span>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span class="info-label">
+                    Lucro / prejuízo
+                </span>
+
+                <span
+                    id="potentialResult"
+                    class="info-number">
+
+                    $0.00
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <canvas
+            id="stockChart">
+        </canvas>
+
+
+        <div class="control-area">
+
+
+            <input
+                id="betInput"
+                type="number"
+                value="10"
+                min="0"
+                step="0.01"
+                placeholder="Valor da aposta">
+
+
+            <button
+                id="gameButton"
+                class="main-button"
+                onclick="gameButtonAction()">
+
+                COMEÇAR
+
+            </button>
+
+        </div>
+
+
+        <div class="bet-info">
+
+            Digite a aposta em dólares.
+
+            <br>
+
+            Mínimo:
+            <strong>10%</strong>
+            do saldo.
+
+            Máximo:
+            <strong>100%</strong>
+            do saldo.
+
+            <br>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CASAS
+     ========================================================= -->
+
+<section
+    id="houses"
+    class="page">
+
+    <div class="page-title">
+
+        <h1>
+            🏠 Casas
+        </h1>
+
+        <p>
+            Propriedades pelo mundo.
+        </p>
+
+    </div>
+
+
+    <div
+        id="housesGrid"
+        class="shop-grid">
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CARROS
+     ========================================================= -->
+
+<section
+    id="cars"
+    class="page">
+
+    <div class="page-title">
+
+        <h1>
+            🚗 Carros
+        </h1>
+
+        <p>
+            Sua coleção de carros.
+        </p>
+
+    </div>
+
+
+    <div
+        id="carsGrid"
+        class="shop-grid">
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     ROUPAS
+     ========================================================= -->
+
+<section
+    id="clothes"
+    class="page">
+
+    <div class="page-title">
+
+        <h1>
+            👕 Roupas
+        </h1>
+
+        <p>
+            Compre roupas para seu personagem.
+        </p>
+
+    </div>
+
+
+    <div
+        id="clothesGrid"
+        class="shop-grid">
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     INVENTÁRIO
+     ========================================================= -->
+
+<section
+    id="inventory"
+    class="page">
+
+    <div class="page-title">
+
+        <h1>
+            🎒 Inventário
+        </h1>
+
+        <p>
+            Tudo que você possui.
+        </p>
+
+    </div>
+
+
+    <div
+        id="inventoryList"
+        class="inventory-list">
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     PERFIL
+     ========================================================= -->
+
+<section
+    id="profile"
+    class="page">
+
+
+    <div class="page-title">
+
+        <h1>
+            👤 Meu Perfil
+        </h1>
+
+        <p>
+            Personalize seu personagem e veja sua garagem.
+        </p>
+
+    </div>
+
+
+    <div class="profile-layout">
+
+
+        <!-- =====================================================
+             INFORMAÇÕES
+             ===================================================== -->
+
+        <div class="profile-card">
+
+            <h2>
+                Informações
+            </h2>
+
+
+            <label>
+                Nome do jogador
+            </label>
+
+
+            <input
+                id="playerName"
+                class="profile-input"
+                placeholder="Digite seu nome">
+
+
+            <button
+                class="save-button"
+                onclick="saveProfile()">
+
+                SALVAR NOME
+
+            </button>
+
+
+            <br>
+            <br>
+
+
+            <p
+                id="profileMessage"
+                style="color:#39e486">
+            </p>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             PERSONAGEM
+             ===================================================== -->
+
+        <div
+            class="character-stage">
+
+
+            <!-- PERSONAGEM -->
+
+            <div class="character">
+
+
+                <div
+                    class="hair">
+                </div>
+
+
+                <div
+                    class="head">
+                </div>
+
+
+                <div
+                    class="arm left">
+                </div>
+
+
+                <div
+                    class="arm right">
+                </div>
+
+
+                <!--
+                    A CAMISA MUDA DE APARÊNCIA
+                    QUANDO O JOGADOR EQUIPA ROUPAS.
+                -->
+
+                <div
+                    id="characterBody"
+                    class="body">
+                </div>
+
+
+                <div
+                    class="pants">
+                </div>
+
+
+                <div
+                    class="shoes left">
+                </div>
+
+
+                <div
+                    class="shoes right">
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ROUPAS
+                 ================================================= -->
+
+            <div
+                class="clothing-selector">
+
+                <h3>
+                    👕 Guarda-roupa
+                </h3>
+
+
+                <div
+                    id="clothesButtons"
+                    class="clothes-buttons">
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         GARAGEM
+         ===================================================== -->
+
+    <div class="garage">
+
+
+        <div class="page-title">
+
+            <h1>
+                🚗 Minha Garagem
+            </h1>
+
+            <p>
+                Seus carros comprados aparecem aqui.
+            </p>
+
+        </div>
+
+
+        <div
+            id="garageGrid"
+            class="garage-grid">
+        </div>
+
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+
+<script>
+
+
+/* =========================================================
+   CONFIGURAÇÕES
+   ========================================================= */
+
+
+/*
+    DINHEIRO INICIAL.
+*/
+
+const STARTING_BALANCE = 100;
+
+
+/*
+    VELOCIDADE DO MERCADO.
+*/
+
+const UPDATE_SPEED = 100;
+
+
+
+/* =========================================================
+   DADOS DO JOGADOR
+   ========================================================= */
+
+const savedBalance =
+    localStorage.getItem("stocksBalance");
+
+let balance =
+    Number(savedBalance);
+
+if (
+    savedBalance === null ||
+    !Number.isFinite(balance)
+) {
+
+    balance = STARTING_BALANCE;
+
+    localStorage.setItem(
+        "stocksBalance",
+        balance
+    );
+
+}
+
+
+
+let inventory =
+    JSON.parse(
+        localStorage.getItem(
+            "stocksInventory"
+        )
+    ) || [];
+
+
+/*
+    Nome do jogador.
+*/
+
+let playerName =
+    localStorage.getItem(
+        "stocksPlayerName"
+    ) || "Jogador";
+
+
+/*
+    Roupa atualmente equipada.
+*/
+
+let equippedClothes =
+    localStorage.getItem(
+        "stocksEquippedClothes"
+    ) || "Roupa básica";
+
+
+
+/* =========================================================
+   ESTADO DO MERCADO
+   ========================================================= */
+
+let gameRunning = false;
+
+let currentBet = 0;
+
+let stockValue = 0;
+
+let gameInterval = null;
+
+let history = [0];
+
+
+
+/* =========================================================
+   ELEMENTOS
+   ========================================================= */
+
+const balanceElement =
+    document.getElementById(
+        "balance"
+    );
+
+
+const stockValueElement =
+    document.getElementById(
+        "stockValue"
+    );
+
+
+const gameButton =
+    document.getElementById(
+        "gameButton"
+    );
+
+
+const betInput =
+    document.getElementById(
+        "betInput"
+    );
+
+
+const roundInfo =
+    document.getElementById(
+        "roundInfo"
+    );
+
+
+const currentBetDisplay =
+    document.getElementById(
+        "currentBetDisplay"
+    );
+
+
+const potentialResult =
+    document.getElementById(
+        "potentialResult"
+    );
+
+
+const canvas =
+    document.getElementById(
+        "stockChart"
+    );
+
+
+const ctx =
+    canvas.getContext("2d");
+
+
+
+/* =========================================================
+   CASAS
+   ========================================================= */
+
+const houses = [
+
+    {
+        name:
+            "Apartamento em Nova York",
+
+        description:
+            "Apartamento de luxo em Manhattan.",
+
+        price:
+            2500,
+
+        icon:
+            "🗽"
+    },
+
+
+    {
+        name:
+            "Casa no Rio de Janeiro",
+
+        description:
+            "Casa de luxo com vista para o mar.",
+
+        price:
+            1800,
+
+        icon:
+            "🌴"
+    },
+
+
+    {
+        name:
+            "Casa no Caribe",
+
+        description:
+            "Casa paradisíaca.",
+
+        price:
+            3200,
+
+        icon:
+            "🏝️"
+    },
+
+
+    {
+        name:
+            "Mansão em Miami",
+
+        description:
+            "Grande propriedade em Miami.",
+
+        price:
+            6500,
+
+        icon:
+            "🌴"
+    },
+
+
+    {
+        name:
+            "Chalé nos Alpes",
+
+        description:
+            "Chalé de luxo nas montanhas.",
+
+        price:
+            4200,
+
+        icon:
+            "🏔️"
+    }
+
+];
+
+
+
+/* =========================================================
+   CARROS
+   ========================================================= */
+
+const cars = [
+
+    {
+        name:
+            "Porsche 911",
+
+        description:
+            "Esportivo de alta performance.",
+
+        price:
+            1000, 
+
+        icon:
+            "🏎️"
+    },
+
+
+    {
+        name:
+            "Lamborghini Huracán",
+
+        description:
+            "Superesportivo italiano.",
+
+        price:
+            2500,
+
+        icon:
+            "🏎️"
+    },
+
+
+    {
+        name:
+            "Ferrari 296 GTB",
+
+        description:
+            "Esportivo híbrido.",
+
+        price:
+            3000,
+
+        icon:
+            "🏎️"
+    },
+
+
+    {
+        name:
+            "Rolls-Royce Phantom",
+
+        description:
+            "Sedã de altíssimo luxo.",
+
+        price:
+            5000,
+
+        icon:
+            "🚘"
+    },
+
+
+    {
+        name:
+            "Mercedes-AMG GT",
+
+        description:
+            "Esportivo alemão.",
+
+        price:
+            1500,
+
+        icon:
+            "🚘"
+    }
+
+];
+
+
+
+/* =========================================================
+   ROUPAS
+   ========================================================= */
+
+const clothes = [
+
+    {
+        name:
+            "Camiseta Básica",
+
+        description:
+            "Roupa inicial do personagem.",
+
+        price:
+            0,
+
+        icon:
+            "👕",
+
+        color:
+            "white"
+    },
+
+
+    {
+        name:
+            "Jaqueta Preta",
+
+        description:
+            "Jaqueta casual.",
+
+        price:
+            100,
+
+        icon:
+            "🧥",
+
+        color:
+            "#20252d"
+    },
+
+
+    {
+        name:
+            "Jaqueta Azul",
+
+        description:
+            "Jaqueta esportiva azul.",
+
+        price:
+            120,
+
+        icon:
+            "🧥",
+
+        color:
+            "#155ec4"
+    },
+
+
+    {
+        name:
+            "Jaqueta Vermelha",
+
+        description:
+            "Jaqueta esportiva vermelha.",
+
+        price:
+            120,
+
+        icon:
+            "🧥",
+
+        color:
+            "#a82131"
+    },
+
+
+    {
+        name:
+            "Terno Executivo",
+
+        description:
+            "Visual executivo.",
+
+        price:
+            500,
+
+        icon:
+            "🤵",
+
+        color:
+            "#151922"
+    },
+
+
+    {
+        name:
+            "Moletom Branco",
+
+        description:
+            "Moletom premium.",
+
+        price:
+            80,
+
+        icon:
+            "👕",
+
+        color:
+            "#e8e8e8"
+    }
+
+];
+
+
+
+/* =========================================================
+   SALDO
+   ========================================================= */
+
+function updateBalance() {
+
+    balanceElement.textContent =
+        "$" +
+        balance.toFixed(2);
+
+
+    localStorage.setItem(
+        "stocksBalance",
+        balance
+    );
+
+}
+
+
+
+/* =========================================================
+   FORMATAÇÃO DE DINHEIRO
+   ========================================================= */
+
+function formatMoney(value) {
+
+    return "$" +
+        value.toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits: 2,
+
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+
+/* =========================================================
+   PERFIL
+   ========================================================= */
+
+function openProfile() {
+
+    showPageDirect(
+        "profile"
+    );
+
+    document
+        .getElementById(
+            "playerName"
+        )
+        .value =
+        playerName;
+
+    renderClothesButtons();
+
+    renderGarage();
+
+}
+
+
+function saveProfile() {
+
+    const input =
+        document.getElementById(
+            "playerName"
+        );
+
+
+    if (
+        input.value.trim() === ""
+    ) {
+
+        alert(
+            "Digite um nome."
+        );
+
+        return;
+
+    }
+
+
+    playerName =
+        input.value.trim();
+
+
+    localStorage.setItem(
+        "stocksPlayerName",
+        playerName
+    );
+
+
+    document
+        .getElementById(
+            "profileMessage"
+        )
+        .textContent =
+        "✓ Nome salvo!";
+
+
+}
+
+
+
+/* =========================================================
+   TROCAR DE PÁGINA
+   ========================================================= */
+
+function showPage(
+    pageId,
+    button
+) {
+
+    document
+        .querySelectorAll(
+            ".page"
+        )
+        .forEach(
+            page =>
+                page.classList.remove(
+                    "active"
+                )
+        );
+
+
+    document
+        .getElementById(
+            pageId
+        )
+        .classList.add(
+            "active"
+        );
+
+
+    document
+        .querySelectorAll(
+            "nav button"
+        )
+        .forEach(
+            btn =>
+                btn.classList.remove(
+                    "active"
+                )
+        );
+
+
+    button.classList.add(
+        "active"
+    );
+
+
+    if (
+        pageId === "profile"
+    ) {
+
+        document
+            .getElementById(
+                "playerName"
+            )
+            .value =
+            playerName;
+
+        renderClothesButtons();
+
+        renderGarage();
+
+    }
+
+}
+
+
+function showPageDirect(
+    pageId
+) {
+
+    document
+        .querySelectorAll(
+            ".page"
+        )
+        .forEach(
+            page =>
+                page.classList.remove(
+                    "active"
+                )
+        );
+
+
+    document
+        .getElementById(
+            pageId
+        )
+        .classList.add(
+            "active"
+        );
+
+
+    document
+        .querySelectorAll(
+            "nav button"
+        )
+        .forEach(
+            btn =>
+                btn.classList.remove(
+                    "active"
+                ));
+}
+
+
+/* =========================================================
+   MERCADO
+   ========================================================= */
+
+function gameButtonAction() {
+
+    if (
+        !gameRunning
+    ) {
+
+        startGame();
+
+    } else {
+
+        rescue();
+
+    }
+
+}
+
+
+
+function startGame() {
+
+    let bet =
+        Number(
+            betInput.value
+        );
+
+
+    const minimumBet =
+        balance * 0.10;
+
+
+    if (
+        isNaN(bet) ||
+        bet <= 0
+    ) {
+
+        alert(
+            "Digite um valor válido."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        bet < minimumBet
+    ) {
+
+        alert(
+            "A aposta mínima é " +
+            formatMoney(
+                minimumBet
+            )
+        );
+
+        return;
+
+    }
+
+
+    if (
+        bet > balance
+    ) {
+
+        alert(
+            "Você não pode apostar mais do que seu saldo."
+        );
+
+        return;
+
+    }
+
+
+    currentBet =
+        bet;
+
+
+    /*
+        A aposta é retirada do saldo
+        quando começa.
+
+        Exemplo:
+
+        Saldo = $100
+        Aposta = $30
+
+        Saldo = $70
+    */
+
+    balance -=
+        currentBet;
+
+
+    updateBalance();
+
+
+    stockValue = 0;
+
+    history = [0];
+
+
+    gameRunning = true;
+
+
+    betInput.disabled = true;
+
+
+    roundInfo.style.display =
+        "flex";
+
+
+    gameButton.textContent =
+        "RESGATAR";
+
+
+    gameButton.classList.add(
+        "rescue"
+    );
+
+
+    gameInterval =
+        setInterval(
+            updateMarket,
+            UPDATE_SPEED
+        );
+
+
+    updateStockDisplay();
+
+    updateRoundInfo();
+
+    drawChart();
+
+}
+
+
+
+function updateMarket() {
+const direction = Math.random() < 0.52 ? 1 : -1;
+
+    const movement = direction *
+        (Math.random() * 2);
+
+
+    stockValue +=
+        movement;
+
+
+    history.push(
+        stockValue
+    );
+
+
+    if (
+        history.length > 120
+    ) {
+
+        history.shift();
+
+    }
+
+
+    updateStockDisplay();
+
+    updateRoundInfo();
+
+    drawChart();
+
+}
+
+
+
+function updateStockDisplay() {
+
+    stockValueElement.textContent =
+        (
+            stockValue >= 0
+                ? "+"
+                : ""
+        ) +
+        stockValue.toFixed(2) + // alterei aqui!
+        "%";
+
+
+    stockValueElement.className =
+        "stock-value " +
+        (
+            stockValue >= 0
+                ? "positive"
+                : "negative"
+        );
+
+}
+
+
+
+function updateRoundInfo() {
+
+    currentBetDisplay.textContent =
+        formatMoney(
+            currentBet
+        );
+
+
+    const result =
+        currentBet *
+        (
+            stockValue /
+            10 // alterei aqui!
+        );
+
+
+    potentialResult.textContent =
+        (
+            result >= 0
+                ? "+"
+                : "-"
+        ) +
+        formatMoney(
+            Math.abs(result)
+        );
+
+
+    potentialResult.className =
+        "info-number " +
+        (
+            result >= 0
+                ? "positive"
+                : "negative"
+        );
+
+}
+
+
+
+/* =========================================================
+   RESGATE
+   ========================================================= */
+
+function rescue() {
+
+    clearInterval(
+        gameInterval
+    );
+
+
+    gameRunning = false;
+
+
+    const result =
+        currentBet *
+        (
+            stockValue /
+            10 // alterei aqui!
+        );
+
+
+    /*
+        POSITIVO
+
+        A aposta já saiu do saldo.
+
+        Agora devolvemos:
+
+        APOSTA + LUCRO
+    */
+
+    if (
+        stockValue >= 0
+    ) {
+
+        const profit =
+            result;
+
+
+        const totalReturned =
+            currentBet +
+            profit;
+
+
+        balance +=
+            totalReturned;
+
+
+        alert(
+
+            "📈 RODADA ENCERRADA!\n\n" +
+
+            "Aposta: " +
+            formatMoney(
+                currentBet
+            ) +
+
+            "\nMercado: +" +
+            stockValue.toFixed(2) +
+            "%" +
+
+            "\nLucro: +" +
+            formatMoney(
+                profit
+            ) +
+
+            "\n\nRetorno total: " +
+            formatMoney(
+                totalReturned
+            )
+
+        );
+
+    }
+
+
+    /*
+        NEGATIVO
+
+        A aposta já saiu.
+
+        Portanto só retiramos
+        o prejuízo adicional.
+    */
+
+    else {
+
+        const extraLoss =
+            Math.abs(
+                result
+            );
+
+
+        balance -=
+            extraLoss;
+
+
+        if (
+            balance < 0
+        ) {
+
+            balance = 0;
+
+        }
+
+
+        const totalLoss =
+            currentBet +
+            extraLoss;
+
+
+        alert(
+
+            "📉 RODADA ENCERRADA!\n\n" +
+
+            "Aposta: " +
+            formatMoney(
+                currentBet
+            ) +
+
+            "\nMercado: " +
+            stockValue.toFixed(2) +
+            "%" +
+
+            "\nPrejuízo adicional: -" +
+            formatMoney(
+                extraLoss
+            ) +
+
+            "\n\nPerda total: " +
+            formatMoney(
+                totalLoss
+            )
+
+        );
+
+    }
+
+
+    updateBalance();
+
+
+    currentBet = 0;
+
+
+    betInput.disabled = false;
+
+
+    gameButton.textContent =
+        "COMEÇAR";
+
+
+    gameButton.classList.remove(
+        "rescue"
+    );
+
+
+    roundInfo.style.display =
+        "none";
+
+}
+
+
+
+/* =========================================================
+   GRÁFICO
+   ========================================================= */
+
+function drawChart() {
+
+    const width =
+        canvas.clientWidth;
+
+
+    const height =
+        canvas.clientHeight;
+
+
+    canvas.width =
+        width *
+        window.devicePixelRatio;
+
+
+    canvas.height =
+        height *
+        window.devicePixelRatio;
+
+
+    ctx.setTransform(
+        window.devicePixelRatio,
+        0,
+        0,
+        window.devicePixelRatio,
+        0,
+        0
+    );
+
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    let max =
+        Math.max(
+            ...history,
+            10
+        );
+
+
+    let min =
+        Math.min(
+            ...history,
+            -10
+        );
+
+
+    const padding = 20;
+
+
+    const range =
+        max - min ||
+        1;
+
+
+    function getY(
+        value
+    ) {
+
+        return height -
+            padding -
+            (
+                (
+                    value -
+                    min
+                ) /
+                range
+            ) *
+            (
+                height -
+                padding * 2
+            );
+
+    }
+
+
+    const zeroY =
+        getY(0);
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        zeroY
+    );
+
+    ctx.lineTo(
+        width,
+        zeroY
+    );
+
+    ctx.strokeStyle =
+        "#344363";
+
+    ctx.stroke();
+
+
+    ctx.beginPath();
+
+
+    history.forEach(
+        (
+            value,
+            index
+        ) => {
+
+            const x =
+                (
+                    index /
+                    (
+                        history.length -
+                        1 ||
+                        1
+                    )
+                ) *
+                width;
+
+
+            const y =
+                getY(
+                    value
+                );
+
+
+            if (
+                index === 0
+            ) {
+
+                ctx.moveTo(
+                    x,
+                    y
+                );
+
+            } else {
+
+                ctx.lineTo(
+                    x,
+                    y
+                );
+
+            }
+
+        }
+    );
+
+
+    ctx.strokeStyle =
+        stockValue >= 0
+            ? "#39e486"
+            : "#ff5668";
+
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
+
+}
+
+
+
+/* =========================================================
+   LOJAS
+   ========================================================= */
+
+function renderShop(
+    items,
+    containerId
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    container.innerHTML = "";
+
+
+    items.forEach(
+        item => {
+
+            const owned =
+                inventory.includes(
+                    item.name
+                );
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "item-card";
+
+
+            card.innerHTML = `
+
+                <div class="item-image">
+                    ${item.icon}
+                </div>
+
+                <div class="item-info">
+
+                    <h3>
+                        ${item.name}
+                    </h3>
+
+                    <p>
+                        ${item.description}
+                    </p>
+
+                    <div class="price">
+                        ${formatMoney(item.price)}
+                    </div>
+
+                    <button
+                        class="buy-button"
+                        onclick="buyItem(
+                            '${item.name}',
+                            ${item.price}
+                        )"
+                        ${owned ? "disabled" : ""}>
+
+                        ${
+                            owned
+                            ? "COMPRADO"
+                            : "COMPRAR"
+                        }
+
+                    </button>
+
+                </div>
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+function buyItem(
+    name,
+    price
+) {
+
+    if (
+        inventory.includes(
+            name
+        )
+    ) {
+
+        alert(
+            "Você já possui este item."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        balance < price
+    ) {
+
+        alert(
+            "Dinheiro insuficiente."
+        );
+
+        return;
+
+    }
+
+
+    balance -=
+        price;
+
+
+    inventory.push(
+        name
+    );
+
+
+    localStorage.setItem(
+        "stocksInventory",
+        JSON.stringify(
+            inventory
+        )
+    );
+
+
+    updateBalance();
+
+
+    renderAllShops();
+
+    renderInventory();
+
+    renderClothesButtons();
+
+    renderGarage();
+
+
+    alert(
+        name +
+        " comprado!"
+    );
+
+}
+
+
+
+/* =========================================================
+   INVENTÁRIO
+   ========================================================= */
+
+function renderInventory() {
+
+    const container =
+        document.getElementById(
+            "inventoryList"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (
+        inventory.length === 0
+    ) {
+
+        container.innerHTML =
+            "<p>Seu inventário está vazio.</p>";
+
+        return;
+
+    }
+
+
+    inventory.forEach(
+        item => {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "inventory-item";
+
+
+            element.textContent =
+                item;
+
+
+            container.appendChild(
+                element
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   GUARDA-ROUPA
+   ========================================================= */
+
+function renderClothesButtons() {
+
+    const container =
+        document.getElementById(
+            "clothesButtons"
+        );
+
+
+    container.innerHTML = "";
+
+
+    /*
+        Roupa básica sempre existe.
+    */
+
+    const ownedClothes = [
+        "Camiseta Básica"
+    ];
+
+
+    clothes.forEach(
+        item => {
+
+            if (
+                inventory.includes(
+                    item.name
+                )
+            ) {
+
+                ownedClothes.push(
+                    item.name
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+        Remove duplicados.
+    */
+
+    const unique =
+        [
+            ...new Set(
+                ownedClothes
+            )
+        ];
+
+
+    unique.forEach(
+        name => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.textContent =
+                (
+                    equippedClothes === name
+                    ? "✓ "
+                    : ""
+                ) +
+                name;
+
+
+            button.onclick =
+                () => equipClothes(
+                    name
+                );
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   EQUIPAR ROUPA
+   ========================================================= */
+
+function equipClothes(
+    name
+) {
+
+    equippedClothes =
+        name;
+
+
+    localStorage.setItem(
+        "stocksEquippedClothes",
+        name
+    );
+
+
+    /*
+        Procura a roupa.
+    */
+
+    const clothing =
+        clothes.find(
+            item =>
+                item.name === name
+        );
+
+
+    const body =
+        document.getElementById(
+            "characterBody"
+        );
+
+
+    if (
+        clothing
+    ) {
+
+        body.style.background =
+            `
+            linear-gradient(
+                90deg,
+                ${darkenColor(clothing.color)},
+                ${clothing.color},
+                ${darkenColor(clothing.color)}
+            )
+            `;
+
+    }
+
+
+    renderClothesButtons();
+
+}
+
+
+
+/* =========================================================
+   ESCURECER COR
+   ========================================================= */
+
+function darkenColor(
+    color
+) {
+
+    if (
+        !color.startsWith("#")
+    ) {
+
+        return color;
+
+    }
+
+
+    let num =
+        parseInt(
+            color.substring(1),
+            16
+        );
+
+
+    let r =
+        (num >> 16) * 0.65;
+
+
+    let g =
+        (
+            (num >> 8) &
+            0x00FF
+        ) * 0.65;
+
+
+    let b =
+        (
+            num &
+            0x0000FF
+        ) * 0.65;
+
+
+    return "#" +
+        (
+            0x1000000 +
+            (Math.round(r) << 16) +
+            (Math.round(g) << 8) +
+            Math.round(b)
+        )
+        .toString(16)
+        .slice(1);
+
+}
+
+
+
+/* =========================================================
+   GARAGEM
+   ========================================================= */
+
+function renderGarage() {
+
+    const container =
+        document.getElementById(
+            "garageGrid"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const ownedCars =
+        cars.filter(
+            car =>
+                inventory.includes(
+                    car.name
+                )
+        );
+
+
+    if (
+        ownedCars.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div
+                class="garage-car">
+
+                <div
+                    class="car-name">
+
+                    🚗 Sua garagem está vazia
+
+                </div>
+
+                <br>
+
+                Compre um carro
+                na loja para
+                colocá-lo aqui.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    ownedCars.forEach(
+        car => {
+
+            const element =
+                document.createElement(
+                    "div"
+                );
+
+
+            element.className =
+                "garage-car";
+
+
+            element.innerHTML = `
+
+                <div class="car-name">
+                    ${car.name}
+                </div>
+
+                <div class="car-body"></div>
+
+                <div class="wheel left"></div>
+
+                <div class="wheel right"></div>
+
+            `;
+
+
+            container.appendChild(
+                element
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   ATUALIZA TODAS AS LOJAS
+   ========================================================= */
+
+function renderAllShops() {
+
+    renderShop(
+        houses,
+        "housesGrid"
+    );
+
+
+    renderShop(
+        cars,
+        "carsGrid"
+    );
+
+
+    renderShop(
+        clothes,
+        "clothesGrid"
+    );
+
+}
+
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+
+updateBalance();
+
+renderAllShops();
+
+renderInventory();
+
+renderClothesButtons();
+
+renderGarage();
+
+updateStockDisplay();
+
+drawChart();
+
+
+/*
+    Aplica a roupa salva
+    ao abrir o jogo.
+*/
+
+const savedClothing =
+    clothes.find(
+        item =>
+            item.name ===
+            equippedClothes
+    );
+
+
+if (
+    savedClothing
+) {
+
+    document
+        .getElementById(
+            "characterBody"
+        )
+        .style.background =
+        `
+        linear-gradient(
+            90deg,
+            ${darkenColor(savedClothing.color)},
+            ${savedClothing.color},
+            ${darkenColor(savedClothing.color)}
+        )
+        `;
+
+}
+
+
+window.addEventListener(
+    "resize",
+    drawChart
+);
+
+
+</script>
+
 </body>
-</html> 
+
+</html>
+```
